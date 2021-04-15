@@ -8,7 +8,10 @@ class TravellingSalesmanProblem(Problem):
         self.Q: float = 1.0
         self.problem = tsplib95.load(path)
 
-    def delta_tau(self, fitness: float, i: int, j: int):
+    def best_fitness(self, actual_fitness: float, best_fitness: float) -> bool:
+        return actual_fitness < best_fitness
+
+    def delta_tau(self, fitness: float):
         return self.Q / fitness
 
     def heuristic(self, i: int, j: int) -> Union[float, int]:

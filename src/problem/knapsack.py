@@ -29,7 +29,10 @@ class Knapsack(Problem):
 
         self.total_values = sum(self.values)
 
-    def delta_tau(self, fitness: float, i: int, j: int):
+    def best_fitness(self, actual_fitness: float, best_fitness: float) -> bool:
+        return actual_fitness > best_fitness
+
+    def delta_tau(self, fitness: float):
         return fitness / self.total_values
 
     def heuristic(self, i: int, j: int) -> Union[float, int]:
@@ -43,7 +46,7 @@ class Knapsack(Problem):
         return moves
 
     def update_possibles_moves(self, solution: List[int],
-                        actual_moves: List[int]) -> List[int]:
+                               actual_moves: List[int]) -> List[int]:
 
         moves_to_remove = []
         actual_weight = sum([self.weight[i] for i in solution])

@@ -115,7 +115,6 @@ class ACO(Solver):
             print(i)
             # construct
             self.construct_phase()
-            #self.update_best()
 
             if self.stagnation == self.stagnation_count:
                 self.init_pheromones()
@@ -134,7 +133,8 @@ class ACO(Solver):
             results = [executor.submit(ant.run) for ant in self.ants]
             for f in as_completed(results):
                 result = f.result()
-                if self.best_tour[0] is None or result[0] > self.best_tour[0]:
+                if self.best_tour[0] is None or self.problem.best_fitness(
+                        result[0], self.best_tour[0]):
                     self.best_tour = (result[0], result[1])
 
         if last_best == self.best_tour[0]:
@@ -154,9 +154,12 @@ class ACO(Solver):
                         i] = self.trail_0
 
     def update_pheromones(self):
+        d_tau = np.sum(
+            [self.problem.delta_tau(ant.fitness) for ant in self.ants])
+
         deposition = np.zeros_like(self.pheromones, dtype=np.float32)
-        deposition[self.best_tour[1], self.best_tour[1][1:] +
-                   self.best_tour[1][:1]] += 1.0 / self.best_tour[0]
+        deposition[self.best_tour[1],
+                   self.best_tour[1][1:] + self.best_tour[1][:1]] += d_tau
 
         self.pheromones = ((1 - self.rho) * self.pheromones) + deposition
 

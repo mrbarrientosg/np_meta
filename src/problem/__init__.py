@@ -4,7 +4,11 @@ from typing import List, Union
 
 class Problem(ABC):
     @abstractmethod
-    def delta_tau(self, fitness: float, i: int, j: int):
+    def best_fitness(self, actual_fitness: float, best_fitness: float) -> bool:
+        pass
+
+    @abstractmethod
+    def delta_tau(self, fitness: float):
         pass
 
     @abstractmethod
@@ -13,7 +17,7 @@ class Problem(ABC):
 
     @abstractmethod
     def update_possibles_moves(self, solution: List[int],
-                        actual_moves: List[int]) -> List[int]:
+                               actual_moves: List[int]) -> List[int]:
         pass
 
     @abstractmethod
